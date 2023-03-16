@@ -1,14 +1,12 @@
 package com.crownhint.simplecustomer.user.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserDto {
     private String firstName;
     private String lastName;

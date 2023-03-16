@@ -2,7 +2,7 @@ package com.crownhint.simplecustomer.user.services;
 
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
-import com.crownhint.simplecustomer.user.exception.SimpleCustomerException;
+import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
 import com.crownhint.simplecustomer.user.models.User;
 import com.crownhint.simplecustomer.user.models.enums.Role;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
@@ -10,9 +10,14 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@ActiveProfiles("dev")
 class UserDaoImplTest {
 
     @Autowired
@@ -22,11 +27,6 @@ class UserDaoImplTest {
     private CustomerDaoImpl customerDao;
     @Autowired
     private ModelMapper modelMapper;
-
-//    @BeforeEach
-//    void setUp() {
-//        customerDao = new CustomerDaoImpl()
-//    }
 
 
 
@@ -104,7 +104,7 @@ class UserDaoImplTest {
     @Test
     public void oneUser_canBeQueried() {
         CreateUserDto request = new CreateUserDto(
-                "sumbo", "unicorn", "doja@example.com", "Customer"
+                "sumbo", "unicorn", "unicorn@example.com", "Customer"
         );
         CreateUserDto request1 = new CreateUserDto(
                 "cobalt", "coppa", "coppa@example.com", "Customer"
@@ -121,10 +121,29 @@ class UserDaoImplTest {
                 "crisux", "latino", "latino@example.com", "Customer"
         );
         CreateUserDto request1 = new CreateUserDto(
-                "logan", "tripartite", "coppa@example.com", "Customer"
+                "logan", "tripartite", "logan@example.com", "Customer"
         );
         customerDao.createUser(request);
         customerDao.createUser(request1);
         assertThrows(SimpleCustomerException.class, ()->customerDao.findUser("arugbo@gmail.com"));
+    }
+
+    @Test
+    public void allUsers_canBeQueried() {
+        CreateUserDto request = new CreateUserDto(
+                "hillsong", "deeper", "hillsong@example.com", "Customer"
+        );
+        CreateUserDto request1 = new CreateUserDto(
+                "singer", "girlie", "girlie@example.com", "Customer"
+        );
+        CreateUserDto request2 = new CreateUserDto(
+                "hallelujah", "abidogun", "habidoun@example.com", "Customer"
+        );
+        UserDto savedUser1 = customerDao.createUser(request);
+        UserDto savedUser2 = customerDao.createUser(request1);
+        UserDto savedUser3 = customerDao.createUser(request2);
+        List<UserDto> usersList = customerDao.findAllUsers();
+        assertThat(usersList).isNotNull();
+        assertThat(usersList.size()).isEqualTo(3);
     }
 }

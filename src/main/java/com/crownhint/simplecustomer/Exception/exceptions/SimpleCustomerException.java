@@ -1,5 +1,8 @@
-package com.crownhint.simplecustomer.user.exception;
+package com.crownhint.simplecustomer.Exception.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public class SimpleCustomerException extends RuntimeException{
 
     private int statusCode;
