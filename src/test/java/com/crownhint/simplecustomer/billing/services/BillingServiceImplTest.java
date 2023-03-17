@@ -29,7 +29,7 @@ class BillingServiceImplTest {
 
     @Test
     void testThatBillingDetails_IsGenerated() {
-        BillingDetailsDto createBillingDetailsRequest = new BillingDetailsDto();
+        BillingDetailsDto createBillingDetailsRequest = new BillingDetailsDto("Ajayi", "Modakeke");
         BillingDetails billingDetails = billingService.createBillingDetails(createBillingDetailsRequest);
         assertThat(billingDetails).isNotNull();
         assertThat(billingDetails.getAccountNumber()).isEqualTo(1_000_000_001 +"-01");
@@ -38,9 +38,9 @@ class BillingServiceImplTest {
     @Test
     void testThatBillingDetails_isPersisted() {
         BillingDetailsDto createBillingDetailsRequest = new BillingDetailsDto();
-        billingService.createBillingDetails(createBillingDetailsRequest);
-        Optional<BillingDetails> repoBillingDetails = billingDetailsRepository.findById(1_000_000_000 +"-01");
-        assertThat(repoBillingDetails.get().getAccountNumber()).isEqualTo(1_000_000_000 +"-01");
+        BillingDetails billingDetails = billingService.createBillingDetails(createBillingDetailsRequest);
+        Optional<BillingDetails> repoBillingDetails = billingDetailsRepository.findByAccountNumber(1_000_000_000 +"-01");
+        assertThat(repoBillingDetails.get().getAccountNumber()).isEqualTo(billingDetails.getAccountNumber());
     }
 
 }

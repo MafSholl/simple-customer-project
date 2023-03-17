@@ -26,9 +26,10 @@ public class CustomerDaoImpl implements UserDao{
     private BillingService billingService;
 
     public CustomerDaoImpl(UserRepository userRepository,
-                           ModelMapper modelMapper) {
+                           ModelMapper modelMapper, BillingService billingService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.billingService = billingService;
     }
     @Override
     public UserDto createUser(CreateUserDto createUserRequest) {

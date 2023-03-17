@@ -30,7 +30,9 @@ public class User {
     @NonNull
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToOne(fetch = FetchType.LAZY)
+
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "billing_accountNumber")
     private BillingDetails billingDetails;
 
