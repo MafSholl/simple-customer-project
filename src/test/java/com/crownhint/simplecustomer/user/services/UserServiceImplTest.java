@@ -19,13 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("dev")
-class UserDaoImplTest {
+class UserServiceImplTest {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private CustomerDaoImpl customerDao;
+    private CustomerServiceImpl customerDao;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -44,8 +44,8 @@ class UserDaoImplTest {
         CreateUserDto createUserDto = new CreateUserDto(
                 "Turaya", "Abeni-Agbon", "abeniagbon@hotmail.com", "Customer"
         );
-        CustomerDaoImpl customerDaoImpl = new CustomerDaoImpl(userRepository, modelMapper, billingService);
-        UserDto newUser = customerDaoImpl.createUser(createUserDto);
+        CustomerServiceImpl customerServiceImpl = new CustomerServiceImpl(userRepository, modelMapper, billingService);
+        UserDto newUser = customerServiceImpl.createUser(createUserDto);
         assertEquals(createUserDto.getFirstName(), newUser.getFirstName());
     }
 

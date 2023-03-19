@@ -5,7 +5,7 @@ import com.crownhint.simplecustomer.user.dtos.UserDto;
 
 import java.util.List;
 
-public interface UserDao {
+public interface UserService {
     UserDto createUser(CreateUserDto createUserDto);
 
     UserDto findUser(String email);

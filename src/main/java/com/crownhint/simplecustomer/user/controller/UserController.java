@@ -3,9 +3,8 @@ package com.crownhint.simplecustomer.user.controller;
 import com.crownhint.simplecustomer.user.controller.response.ApiResponse;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
-import com.crownhint.simplecustomer.user.services.UserDao;
+import com.crownhint.simplecustomer.user.services.UserService;
 import jakarta.validation.Valid;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +17,11 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
 
     @PostMapping("/save-customer")
     public ResponseEntity<?> saveCustomer(@Valid @RequestBody CreateUserDto createCustomerRequest) {
-        UserDto responseBody = userDao.createUser(createCustomerRequest);
+        UserDto responseBody = userService.createUser(createCustomerRequest);
         ApiResponse body = ApiResponse.builder()
                 .status("Success")
                 .message("Customer created successfully")
@@ -34,7 +33,7 @@ public class UserController {
 
     @GetMapping("/find-customer")
     public ResponseEntity<?> findCustomer(@RequestParam("email") String email) {
-        UserDto responseBody = userDao.findUser(email);
+        UserDto responseBody = userService.findUser(email);
         ApiResponse body = ApiResponse.builder()
                 .status("Success")
                 .message("Customer found successfully")
@@ -46,7 +45,7 @@ public class UserController {
 
     @GetMapping("/all-customer")
     public ResponseEntity<?> findAllCustomer() {
-        List<UserDto> responseBody = userDao.findAllUsers();
+        List<UserDto> responseBody = userService.findAllUsers();
         ApiResponse body = ApiResponse.builder()
                 .status("Success")
                 .message("All customers found successfully")

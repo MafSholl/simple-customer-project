@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
-public class CustomerDaoImpl implements UserDao{
+public class CustomerServiceImpl implements UserService {
 
     private UserRepository userRepository;
     @Autowired
@@ -25,8 +25,8 @@ public class CustomerDaoImpl implements UserDao{
     @Autowired
     private BillingService billingService;
 
-    public CustomerDaoImpl(UserRepository userRepository,
-                           ModelMapper modelMapper, BillingService billingService) {
+    public CustomerServiceImpl(UserRepository userRepository,
+                               ModelMapper modelMapper, BillingService billingService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.billingService = billingService;

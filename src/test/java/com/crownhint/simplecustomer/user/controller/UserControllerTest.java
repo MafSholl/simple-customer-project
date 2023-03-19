@@ -3,7 +3,7 @@ package com.crownhint.simplecustomer.user.controller;
 import com.crownhint.simplecustomer.user.controller.response.ApiResponse;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
-import com.crownhint.simplecustomer.user.services.UserDao;
+import com.crownhint.simplecustomer.user.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private UserDao userDao;
+    private UserService userService;
     @Autowired
     private ObjectMapper objectMapper;
     private CreateUserDto request;
@@ -90,7 +90,7 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
-        verify(userDao, times(1)).createUser(any(CreateUserDto.class));
+        verify(userService, times(1)).createUser(any(CreateUserDto.class));
     }
 
     @Test
@@ -101,7 +101,7 @@ class UserControllerTest {
                 .data(responseBody)
                 .statusCode(HttpStatus.OK.value())
                 .build();
-        when(userDao.createUser(any(CreateUserDto.class))).thenReturn(responseBody);
+        when(userService.createUser(any(CreateUserDto.class))).thenReturn(responseBody);
 
         MvcResult result =this.mockMvc.perform(post("/api/v1/customer/save-customer")
                 .accept(MediaType.APPLICATION_JSON)
@@ -126,7 +126,7 @@ class UserControllerTest {
                 .data(responseBody)
                 .statusCode(HttpStatus.OK.value())
                 .build();
-        when(userDao.findUser(any(String.class))).thenReturn(responseBody);
+        when(userService.findUser(any(String.class))).thenReturn(responseBody);
 
         MvcResult result = this.mockMvc.perform(get("/api/v1/customer/find-customer")
                 .accept(MediaType.APPLICATION_JSON)
@@ -153,7 +153,7 @@ class UserControllerTest {
                 .data(usersList)
                 .statusCode(HttpStatus.OK.value())
                 .build();
-        when(userDao.findAllUsers()).thenReturn(usersList);
+        when(userService.findAllUsers()).thenReturn(usersList);
 
         MvcResult result = this.mockMvc.perform(get("/api/v1/customer/all-customer")
                 .accept(MediaType.APPLICATION_JSON)
