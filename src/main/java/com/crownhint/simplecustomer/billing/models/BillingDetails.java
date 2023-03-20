@@ -17,7 +17,7 @@ public class BillingDetails {
     private Long id;
     @NonNull
     @Column(unique = true)
-    @Pattern(regexp = "^[\\d]{10}(\\-[\\d]{2})")
+    @Pattern(regexp = "^[\\d]{10}(\\-[\\d]{2})$")
     private String accountNumber;
     private Long tarriff;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
