@@ -2,6 +2,7 @@ package com.crownhint.simplecustomer.user.services;
 
 import com.crownhint.simplecustomer.billing.dtos.BillingDetailsDto;
 import com.crownhint.simplecustomer.billing.services.BillingService;
+import com.crownhint.simplecustomer.customer.services.CustomerService;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
 import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
@@ -17,16 +18,15 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
-public class CustomerServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-    @Autowired
     private ModelMapper modelMapper;
-    @Autowired
     private BillingService billingService;
 
-    public CustomerServiceImpl(UserRepository userRepository,
-                               ModelMapper modelMapper, BillingService billingService) {
+    public UserServiceImpl(UserRepository userRepository,
+                           ModelMapper modelMapper,
+                           BillingService billingService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.billingService = billingService;

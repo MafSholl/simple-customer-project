@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(SimpleCustomerException.class)
     public ResponseEntity<?> conflictHandler(SimpleCustomerException ex) {
         ApiResponse body = ApiResponse.builder()
                 .status("Failure")
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatusCode.valueOf(ex.getStatusCode()));
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<?> conflictHandler(Exception ex) {
         ApiResponse body = ApiResponse.builder()
                 .status("something happened. Please try again.")

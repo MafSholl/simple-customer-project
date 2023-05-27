@@ -7,12 +7,11 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "`User`")
+@Entity(name = "user")
 public class User {
 
     @Id
@@ -27,13 +26,11 @@ public class User {
     @NonNull
     @Column(name = "email", unique = true)
     private String email;
+    private String password;
     @NonNull
     @Enumerated(EnumType.STRING)
     private Role role;
-
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "billing_accountNumber")
+    @JoinColumn(name = "billing_details")
     private BillingDetails billingDetails;
-
 }

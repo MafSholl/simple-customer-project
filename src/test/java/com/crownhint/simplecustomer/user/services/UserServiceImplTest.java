@@ -25,7 +25,7 @@ class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Autowired
-    private CustomerServiceImpl customerDao;
+    private UserServiceImpl customerDao;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -44,8 +44,8 @@ class UserServiceImplTest {
         CreateUserDto createUserDto = new CreateUserDto(
                 "Turaya", "Abeni-Agbon", "abeniagbon@hotmail.com", "Customer"
         );
-        CustomerServiceImpl customerServiceImpl = new CustomerServiceImpl(userRepository, modelMapper, billingService);
-        UserDto newUser = customerServiceImpl.createUser(createUserDto);
+        UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, modelMapper, billingService);
+        UserDto newUser = userServiceImpl.createUser(createUserDto);
         assertEquals(createUserDto.getFirstName(), newUser.getFirstName());
     }
 

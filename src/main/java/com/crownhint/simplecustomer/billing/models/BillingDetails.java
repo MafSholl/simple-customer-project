@@ -10,7 +10,7 @@ import lombok.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
+@Entity(name = "billing_details")
 public class BillingDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
