@@ -1,6 +1,6 @@
-create database if not exists user;
+create database if not exists customer;
 
-create table if not exists user
+create table if not exists customer
 
 
 insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('915', 'Deena', 'Wellum', 'dwellum0@google.com.br', 'fuI6pFLNzFlE', 'Supervisor', '53');

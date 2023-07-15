@@ -11,8 +11,8 @@ import lombok.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "user")
-public class User {
+@Entity(name = "Customer")
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

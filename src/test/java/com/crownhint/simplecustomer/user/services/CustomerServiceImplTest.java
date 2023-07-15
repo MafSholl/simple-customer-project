@@ -4,9 +4,10 @@ import com.crownhint.simplecustomer.billing.services.BillingService;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
 import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
-import com.crownhint.simplecustomer.user.models.User;
+import com.crownhint.simplecustomer.user.models.Customer;
 import com.crownhint.simplecustomer.user.models.enums.Role;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("dev")
-class UserServiceImplTest {
+class CustomerServiceImplTest {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserServiceImpl customerDao;
     @Autowired
@@ -31,12 +31,19 @@ class UserServiceImplTest {
     @Autowired
     private BillingService billingService;
 
-
+    @BeforeEach
+    void setup() {
+        customerDao = new UserServiceImpl(
+                userRepository,
+                modelMapper,
+                billingService
+        );
+    }
 
     @Test
     public void userExistTest() {
-        User user = new User();
-        assertNotNull(user);
+        Customer customer = new Customer();
+        assertNotNull(customer);
     }
 
     @Test
@@ -55,8 +62,8 @@ class UserServiceImplTest {
                 "Sam", "Igbenidion", "sameigbinedion@example.com", "Customer"
         );
         UserDto newUser =  customerDao.createUser(createUserDto);
-        User savedUser = userRepository.findByFirstName(createUserDto.getFirstName());
-        assertEquals(newUser.getEmail(), savedUser.getEmail());
+        Customer savedCustomer = userRepository.findByFirstName(createUserDto.getFirstName());
+        assertEquals(newUser.getEmail(), savedCustomer.getEmail());
     }
 
     @Test
@@ -65,12 +72,12 @@ class UserServiceImplTest {
                 "Samuel", "Olorunsola", "titobi@example.com", "Customer"
         );
         UserDto newUser =  customerDao.createUser(createUserDto);
-        User savedUser = userRepository.findByFirstName(createUserDto.getFirstName());
-        assertEquals(createUserDto.getFirstName(), savedUser.getFirstName());
-        assertEquals(createUserDto.getLastName(), savedUser.getLastName());
-        assertEquals(createUserDto.getEmail(), savedUser.getEmail());
-        assertEquals(Role.class, savedUser.getRole().getClass() );
-        assertNotNull(savedUser.getBillingDetails());
+        Customer savedCustomer = userRepository.findByFirstName(createUserDto.getFirstName());
+        assertEquals(createUserDto.getFirstName(), savedCustomer.getFirstName());
+        assertEquals(createUserDto.getLastName(), savedCustomer.getLastName());
+        assertEquals(createUserDto.getEmail(), savedCustomer.getEmail());
+        assertEquals(Role.class, savedCustomer.getRole().getClass() );
+        assertNotNull(savedCustomer.getBillingDetails());
     }
 
     @Test

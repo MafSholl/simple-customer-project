@@ -1,6 +1,6 @@
 package com.crownhint.simplecustomer.billing.models;
 
-import com.crownhint.simplecustomer.user.models.User;
+import com.crownhint.simplecustomer.user.models.Customer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -22,5 +22,5 @@ public class BillingDetails {
     private Long tarriff;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "customerId")
-    private User userId;
+    private Customer customerId;
 }
