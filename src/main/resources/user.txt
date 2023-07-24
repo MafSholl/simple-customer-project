@@ -1,105 +1,40 @@
-create database if not exists customer;
 
-create table if not exists customer
+IF OBJECT_ID(N'customer', N'D') IS NULL
+    CREATE DATABASE customer;
+    GO;
 
+IF OBJECT_ID(N'roles', N'U') IS NULL
+    CREATE TABLE roles (
+        id INT PRIMARY KEY,
+        role VARCHAR(20) NOT NULL
+    );
+    Go
 
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('915', 'Deena', 'Wellum', 'dwellum0@google.com.br', 'fuI6pFLNzFlE', 'Supervisor', '53');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('13801', 'Tracie', 'Joel', 'tjoel1@who.int', 'nfSjl9L3RW', 'Project Manager', '0689');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('46933', 'Zeke', 'Costigan', 'zcostigan2@4shared.com', 'OfbFyL4YDS5a', 'Estimator', '65299');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('824', 'Germayne', 'Mimmack', 'gmimmack3@skyrock.com', 'ov8qBXQ', 'Engineer', '69910');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('8', 'Yuma', 'Mattersley', 'ymattersley4@techcrunch.com', 'ob49v1JHT', 'Supervisor', '494');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('46143', 'Lorelei', 'Hallett', 'lhallett5@google.ru', 'J58yLuIMcv', 'Engineer', '656');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('695', 'Carlyle', 'Adrain', 'cadrain6@cdc.gov', 'e1AiNhauwy', 'Construction Manager', '87477');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('95854', 'Francis', 'Pacheco', 'fpacheco7@google.com.hk', 'q28LkG9GYr', 'Engineer', '545');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('652', 'Dex', 'Connelly', 'dconnelly8@howstuffworks.com', 'HHd3GE', 'Construction Worker', '5069');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('58', 'Reed', 'McClements', 'rmcclements9@wikipedia.org', 'TKMAX7o', 'Supervisor', '67992');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('11', 'Eba', 'Dogerty', 'edogertya@ehow.com', '9SNVTEYIu5qm', 'Construction Expeditor', '7654');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('4', 'Orlan', 'Stair', 'ostairb@trellian.com', '6UkZ4Jsju', 'Construction Expeditor', '13858');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('7', 'Sauveur', 'Niemiec', 'sniemiecc@microsoft.com', 'qXxpSq3', 'Surveyor', '624');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('40001', 'Carny', 'Mildenhall', 'cmildenhalld@nifty.com', 'J2Op9J', 'Estimator', '44906');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('361', 'Eugene', 'Worsham', 'eworshame@typepad.com', '1isNLzG9mjCE', 'Construction Worker', '433');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('0207', 'Felisha', 'Dobrovsky', 'fdobrovskyf@discovery.com', 'rsc6zfgkag', 'Engineer', '9');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('4', 'Brynna', 'Gotliffe', 'bgotliffeg@histats.com', 'cKCQvTmBatvU', 'Subcontractor', '2470');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('87', 'Kali', 'Isworth', 'kisworthh@slate.com', 'QBYr8DPrh', 'Construction Expeditor', '3');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5', 'Law', 'Bogace', 'lbogacei@uiuc.edu', 'nsXBxH63H', 'Surveyor', '53955');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('2', 'Sherwin', 'Matissoff', 'smatissoffj@answers.com', 'pW84LgSAOS', 'Project Manager', '28');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('16', 'Oliver', 'Strippling', 'ostripplingk@va.gov', 'bAGtxXcG', 'Supervisor', '84107');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('79', 'Fawne', 'Greason', 'fgreasonl@google.com.au', 'mbkRD40gKe', 'Project Manager', '8094');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('75', 'Misty', 'Haggerston', 'mhaggerstonm@vinaora.com', 'hrZfn1mkFWi', 'Electrician', '72833');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('0034', 'Flin', 'Mc Coughan', 'fmccoughann@usa.gov', '6741kej6', 'Electrician', '6');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('09197', 'Rodrick', 'Cadamy', 'rcadamyo@feedburner.com', 'UZBN9tYlhS', 'Construction Manager', '578');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('26', 'Alyssa', 'Oswell', 'aoswellp@nydailynews.com', 'WexAYDF', 'Supervisor', '7');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('48', 'Daune', 'Evershed', 'devershedq@ask.com', '4a26SqSHSP5', 'Construction Manager', '7796');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('1', 'Whitman', 'Ullyott', 'wullyottr@statcounter.com', 'kC8QYTMj', 'Supervisor', '77');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('594', 'Quintina', 'Scollard', 'qscollards@1688.com', 'tHTpxS', 'Engineer', '9919');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('8763', 'Margarette', 'Beau', 'mbeaut@hexun.com', 'CEjElF6L', 'Construction Worker', '0');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('6', 'Amalita', 'Godsafe', 'agodsafeu@yale.edu', 'tcarpcJ0su6', 'Engineer', '7763');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('35695', 'Randie', 'Pletts', 'rplettsv@livejournal.com', 'loNAKN', 'Construction Manager', '8557');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('581', 'Miquela', 'Lynnitt', 'mlynnittw@chronoengine.com', 'Ci478d9fl', 'Engineer', '49823');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('14051', 'Jo ann', 'Debrick', 'jdebrickx@bravesites.com', 'lTktzDpoS9c', 'Estimator', '590');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('92', 'Faith', 'Plaide', 'fplaidey@cisco.com', 'HPgvUtdPI3p1', 'Construction Worker', '01417');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('9319', 'Anica', 'Cusack', 'acusackz@cmu.edu', 'fDrFwkTC', 'Supervisor', '4594');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5538', 'Lauryn', 'Klesel', 'lklesel10@bizjournals.com', 'b3Ry7s5sItxv', 'Construction Worker', '6909');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('3', 'Bella', 'Anselmi', 'banselmi11@walmart.com', 'qK5vuH', 'Subcontractor', '836');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('15093', 'Rachael', 'Oppery', 'roppery12@biglobe.ne.jp', 'fLoSsY3B9Ly', 'Architect', '17896');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5', 'Cicely', 'Dieton', 'cdieton13@booking.com', 'zIRRnHzpGN', 'Engineer', '20379');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('2', 'Cinda', 'Trayling', 'ctrayling14@ehow.com', 'pZ4ZRcvQXE', 'Supervisor', '2');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('0', 'Jock', 'Brezlaw', 'jbrezlaw15@google.fr', 'EtWGVJupKS', 'Construction Worker', '16919');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('24', 'Gonzalo', 'Zamudio', 'gzamudio16@comcast.net', 'CmGkCwModK', 'Supervisor', '769');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('40', 'Godiva', 'Reide', 'greide17@51.la', 'vfaEtp7r', 'Construction Foreman', '55198');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('92049', 'Milka', 'Jacobowicz', 'mjacobowicz18@ehow.com', 'tzpYEqtFYW', 'Construction Expeditor', '42136');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('9', 'Bondy', 'Ravenscraft', 'bravenscraft19@phoca.cz', 'rnNzcUCpDEd', 'Electrician', '6939');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('95', 'Noak', 'Rosenfelt', 'nrosenfelt1a@spotify.com', '7ByFxA0S4', 'Subcontractor', '638');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('936', 'Emilee', 'Le Guin', 'eleguin1b@msn.com', 'zTL8UCl', 'Construction Expeditor', '234');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('3084', 'Millie', 'Emanueli', 'memanueli1c@cyberchimps.com', 'XO4xU0Gfv8', 'Estimator', '891');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('9', 'Filberte', 'Kauscher', 'fkauscher1d@mysql.com', 'NeZCNVg', 'Electrician', '305');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('792', 'Patton', 'Tyhurst', 'ptyhurst1e@upenn.edu', 'XUyvYpf094nu', 'Subcontractor', '5');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('925', 'Tris', 'Phippard', 'tphippard1f@yellowpages.com', '4GMzfRjuu', 'Surveyor', '0115');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('99', 'Kristan', 'Leinster', 'kleinster1g@bloomberg.com', 'ggDYoD5', 'Construction Worker', '43');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('54349', 'Edyth', 'Joannic', 'ejoannic1h@usa.gov', 'kEVzuLASVO', 'Supervisor', '8536');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('98025', 'Ignaz', 'Scottini', 'iscottini1i@hatena.ne.jp', 'vZcrwTo', 'Construction Foreman', '4737');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('4769', 'Lisabeth', 'Oury', 'loury1j@statcounter.com', '1lzGYW3o', 'Construction Expeditor', '5');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('0', 'Petr', 'Dunbobin', 'pdunbobin1k@slashdot.org', 'CVEMkPtUtoAb', 'Construction Foreman', '49');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('2835', 'Nicolette', 'Cheel', 'ncheel1l@cbsnews.com', 'nHMEZw', 'Construction Worker', '663');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('8448', 'Doll', 'Marcoolyn', 'dmarcoolyn1m@google.cn', 'a568hwmnN2q', 'Construction Foreman', '215');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('86', 'Lucille', 'Standen', 'lstanden1n@skype.com', 'PLSGvx6vMtVJ', 'Construction Worker', '32873');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('69', 'Birgitta', 'Reason', 'breason1o@salon.com', 'OzD9v51CjS', 'Supervisor', '19493');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('272', 'Melody', 'Jeanet', 'mjeanet1p@wikipedia.org', '7oHz2C', 'Engineer', '7443');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('692', 'Minnaminnie', 'Moxom', 'mmoxom1q@angelfire.com', 'cjtXeNBGw5W', 'Construction Manager', '2');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('85268', 'Nicoline', 'Meadows', 'nmeadows1r@unc.edu', 'VzsOmjLL', 'Engineer', '07782');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('81', 'Giselbert', 'Diter', 'gditer1s@de.vu', 'qugJnrNKlgb', 'Estimator', '4');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('3', 'Nari', 'Kitney', 'nkitney1t@whitehouse.gov', '22EWATFpBa', 'Engineer', '3022');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5734', 'Britta', 'Yakushkin', 'byakushkin1u@ebay.com', 'QYxhYfODrCzp', 'Project Manager', '60');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('20581', 'Teddie', 'Tiley', 'ttiley1v@wunderground.com', 'XxaRLyxW', 'Estimator', '43250');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('4', 'Giovanna', 'Esch', 'gesch1w@un.org', 'GolYLLoPVJUB', 'Construction Expeditor', '5710');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('7268', 'Urbain', 'Acors', 'uacors1x@nba.com', '05ubpX8', 'Engineer', '620');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('254', 'Butch', 'Thraves', 'bthraves1y@wufoo.com', 'G1MKfMxdew', 'Construction Worker', '426');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('7', 'Conroy', 'Haddock', 'chaddock1z@cpanel.net', '3gXNPVgSGI', 'Subcontractor', '46698');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('701', 'Briant', 'Pruce', 'bpruce20@ameblo.jp', 'ZgugJX', 'Surveyor', '1163');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5', 'Kary', 'Ainsley', 'kainsley21@xrea.com', 'OEK47mdyQ', 'Engineer', '6236');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('8', 'Adrian', 'Sink', 'asink22@cnn.com', 'yPhljah', 'Electrician', '29951');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5', 'Gennie', 'Mompesson', 'gmompesson23@apache.org', '5IiwIFC6', 'Architect', '82');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('7', 'Bernadette', 'Greenwell', 'bgreenwell24@fda.gov', '8f0RuRhF', 'Project Manager', '1');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('404', 'Renae', 'McAsgill', 'rmcasgill25@amazon.co.jp', 'TrK5vxB5323c', 'Architect', '4296');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('98822', 'Antonie', 'Ivasyushkin', 'aivasyushkin26@adobe.com', 'YhhYHE', 'Electrician', '12');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('58837', 'Barn', 'Turn', 'bturn27@ft.com', '0yqsgg', 'Construction Worker', '4941');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('97', 'Melina', 'Aloshikin', 'maloshikin28@sphinn.com', 'zIKiiGie', 'Electrician', '5');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('2', 'Gibby', 'Dimbleby', 'gdimbleby29@samsung.com', 'xxOeZD', 'Estimator', '94');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('75572', 'Bette-ann', 'Quincey', 'bquincey2a@narod.ru', 'bKp7ThxMTdbP', 'Engineer', '8295');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('78315', 'Angelia', 'Twelftree', 'atwelftree2b@blinklist.com', 'o5apNZ', 'Construction Manager', '0');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('96267', 'Shaine', 'Barnwall', 'sbarnwall2c@yellowpages.com', '4xuZo0Gq', 'Project Manager', '91226');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('2280', 'Jaye', 'Keitley', 'jkeitley2d@t-online.de', 'u2xxyOoIj6', 'Project Manager', '040');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('91', 'Norman', 'Nutt', 'nnutt2e@forbes.com', 'XIhGDcR0', 'Construction Manager', '5316');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('268', 'Joaquin', 'Lashbrook', 'jlashbrook2f@wisc.edu', 'PfGU9k', 'Construction Foreman', '57464');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('71', 'Purcell', 'Soars', 'psoars2g@merriam-webster.com', 'I79Q3d1Ib', 'Construction Foreman', '20');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('0', 'Gill', 'Pohlak', 'gpohlak2h@walmart.com', 'Ctsh7l85c', 'Construction Manager', '3933');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('35328', 'Lise', 'Rosgen', 'lrosgen2i@over-blog.com', 'ZguorjT', 'Engineer', '6179');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5', 'Terry', 'Banke', 'tbanke2j@redcross.org', 'Ehjt0N3H3', 'Construction Worker', '61');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5', 'Darlene', 'Colaco', 'dcolaco2k@dedecms.com', '7lrbT3lK1', 'Architect', '71');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('97', 'Garrott', 'Chadd', 'gchadd2l@mapquest.com', 'aTzUuy', 'Subcontractor', '9');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('232', 'Rich', 'Haydney', 'rhaydney2m@cyberchimps.com', 'bHxIlsfm8', 'Project Manager', '2131');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('1', 'Nicole', 'Kennham', 'nkennham2n@umich.edu', 'lflUKK', 'Engineer', '6096');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('5673', 'Brock', 'Zuann', 'bzuann2o@cpanel.net', '14tYfibqtQYQ', 'Architect', '005');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('32', 'Caron', 'Uvedale', 'cuvedale2p@weather.com', '6aw7qsDeuQCV', 'Supervisor', '9963');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('63', 'Zola', 'Mesant', 'zmesant2q@gizmodo.com', 'yGWiY07kWi', 'Subcontractor', '4475');
-insert ignore into User (id, firstname, lastname, email, password, role, billing_details) values ('471', 'Earle', 'Merioth', 'emerioth2r@w3.org', 'fIpSPkrSxMI', 'Construction Foreman', '3');
+CREATE TABLE Customer (
+    id INT NOT NULL IDENTITY(1, 1),
+    firstName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255),
+    role VARCHAR(255) NOT NULL,
+    billing_details INT,
+    CONSTRAINT CustomerPk PRIMARY KEY(id),
+    CONSTRAINT CustomerAk UNIQUE(email),
+    CONSTRAINT BillingDetails_Fk FOREIGN KEY (billing_details)
+        REFERENCES billing_details(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE billing_details (
+    id INT NOT NULL CONSTRAINT BillingDetails_PK PRIMARY KEY IDENTITY(100, 5),
+    accountNumber VARCHAR(15),
+    tariff INT NULL DEFAULT 0,
+    customer_Id INT,
+    CONSTRAINT Customer_FK FOREIGN KEY (customer_id)
+        REFERENCES customer(id)
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+

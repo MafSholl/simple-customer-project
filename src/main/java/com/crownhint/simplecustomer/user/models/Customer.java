@@ -15,10 +15,18 @@ import lombok.*;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "generator",
+            sequenceName = "CustomerID_Seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            generator = "generator",
+            strategy = GenerationType.SEQUENCE
+    )
     private Long id;
     @NonNull
-    @Column(name = "firstname")
+    @Column(name = "firstName")
     private String firstName;
     @NonNull
     @Column(name = "lastName")
@@ -31,6 +39,6 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "billing_details")
+    @JoinColumn(name = "Billing_details")
     private BillingDetails billingDetails;
 }

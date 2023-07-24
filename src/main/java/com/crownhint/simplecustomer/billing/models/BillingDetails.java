@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 @Entity(name = "billing_details")
 public class BillingDetails {
-    @Id
+    @Id @NonNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NonNull
@@ -21,6 +21,6 @@ public class BillingDetails {
     private String accountNumber;
     private Long tarriff;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "customerId")
+    @JoinColumn(name = "customer_Id")
     private Customer customerId;
 }
