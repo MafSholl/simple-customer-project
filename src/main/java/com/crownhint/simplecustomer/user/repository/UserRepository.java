@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<Customer, Long> {
     Customer findByFirstName(String firstName);
     Iterable<Customer> findAllByRole(Role admin);
-
     Optional<Customer> findByEmail(String email);
 
 }

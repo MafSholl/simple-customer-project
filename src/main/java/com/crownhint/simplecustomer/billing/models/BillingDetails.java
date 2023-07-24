@@ -12,8 +12,8 @@ import lombok.*;
 @Builder
 @Entity(name = "billing_details")
 public class BillingDetails {
-    @Id @NonNull
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NonNull
     @Column(unique = true)
