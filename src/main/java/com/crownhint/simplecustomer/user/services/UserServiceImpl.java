@@ -8,6 +8,7 @@ import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException
 import com.crownhint.simplecustomer.user.models.Customer;
 import com.crownhint.simplecustomer.user.models.enums.Role;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -37,8 +39,10 @@ public class UserServiceImpl implements UserService {
         validateDuplicateEmailIfExistingInRepository(createUserRequest);
         validateEmail(createUserRequest.getEmail());
         Customer customer = modelMapper.map(createUserRequest, Customer.class);
-        customer.setRole(Role.CUSTOMER);
-        customer.setBillingDetails(billingService.createBillingDetails(new BillingDetailsDto(
+        customer.setRole(
+                (createUserRequest.getRole().equalsIgnoreCase("customer")) ? Role.CUSTOMER : Role.STAFF
+        );
+        customer.setBillingId(billingService.createBillingDetails(new BillingDetailsDto(
                 createUserRequest.getFirstName(), createUserRequest.getLastName()
         )));
         Customer savedCustomer = userRepository.save(customer);
@@ -50,9 +54,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private static void validateInputFields(CreateUserDto createUserRequest) {
-        if (createUserRequest.getFirstName() == null || createUserRequest.getLastName() == null ||
-                createUserRequest.getEmail() == null || createUserRequest.getRole() == null
-        ) throw new SimpleCustomerException("Request field cannot be null");
     }
 
     private static void validateEmail(String email) {
@@ -74,15 +75,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAllUsers() {
         List<Customer> customerList = userRepository.findAll();
-        System.out.println(customerList.size());
-        System.out.println(userRepository.count());
+        log.info("Customer list count: -> {}", customerList.size());
         List<UserDto> userDtoList = new ArrayList<>();
         System.out.println(Arrays.deepToString(customerList.toArray()));
-        if (customerList.size() == userRepository.count()) {
-            userDtoList = customerList.stream()
+        userDtoList = customerList.stream()
                     .map(customer -> modelMapper.map(customer, UserDto.class))
                     .collect(Collectors.toList());
-        }
         return userDtoList;
     }
 

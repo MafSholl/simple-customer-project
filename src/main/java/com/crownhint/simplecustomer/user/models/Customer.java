@@ -39,6 +39,6 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "Billing_details")
-    private BillingDetails billingDetails;
+    @JoinColumn(name = "billing_id")
+    private BillingDetails billingId;
 }

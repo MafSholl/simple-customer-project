@@ -77,7 +77,7 @@ class CustomerServiceImplTest {
         assertEquals(createUserDto.getLastName(), savedCustomer.getLastName());
         assertEquals(createUserDto.getEmail(), savedCustomer.getEmail());
         assertEquals(Role.class, savedCustomer.getRole().getClass() );
-        assertNotNull(savedCustomer.getBillingDetails());
+        assertNotNull(savedCustomer.getBillingId());
     }
 
     @Test
