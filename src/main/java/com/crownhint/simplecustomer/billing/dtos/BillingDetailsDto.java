@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BillingDetailsDto {
 
     @NonNull
@@ -14,5 +15,5 @@ public class BillingDetailsDto {
     @NonNull
     private String customerLastName;
     private String accountNumber;
-    private Long tarriff;
+    private Double tarriff;
 }

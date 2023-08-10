@@ -2,22 +2,24 @@ package com.crownhint.simplecustomer.user.services;
 
 import com.crownhint.simplecustomer.billing.dtos.BillingDetailsDto;
 import com.crownhint.simplecustomer.billing.services.BillingService;
-import com.crownhint.simplecustomer.customer.services.CustomerService;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
 import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
-import com.crownhint.simplecustomer.user.models.User;
+import com.crownhint.simplecustomer.user.models.Customer;
 import com.crownhint.simplecustomer.user.models.enums.Role;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -36,13 +38,15 @@ public class UserServiceImpl implements UserService {
         validateInputFields(createUserRequest);
         validateDuplicateEmailIfExistingInRepository(createUserRequest);
         validateEmail(createUserRequest.getEmail());
-        User user = modelMapper.map(createUserRequest, User.class);
-        user.setRole(Role.CUSTOMER);
-        user.setBillingDetails(billingService.createBillingDetails(new BillingDetailsDto(
+        Customer customer = modelMapper.map(createUserRequest, Customer.class);
+        customer.setRole(
+                (createUserRequest.getRole().equalsIgnoreCase("customer")) ? Role.CUSTOMER : Role.STAFF
+        );
+        customer.setBillingId(billingService.createBillingDetails(new BillingDetailsDto(
                 createUserRequest.getFirstName(), createUserRequest.getLastName()
         )));
-        User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, UserDto.class);
+        Customer savedCustomer = userRepository.save(customer);
+        return modelMapper.map(savedCustomer, UserDto.class);
     }
 
     private void validateDuplicateEmailIfExistingInRepository(CreateUserDto createUserRequest) {
@@ -50,9 +54,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private static void validateInputFields(CreateUserDto createUserRequest) {
-        if (createUserRequest.getFirstName() == null || createUserRequest.getLastName() == null ||
-                createUserRequest.getEmail() == null || createUserRequest.getRole() == null
-        ) throw new SimpleCustomerException("Request field cannot be null");
     }
 
     private static void validateEmail(String email) {
@@ -66,20 +67,20 @@ public class UserServiceImpl implements UserService {
     public UserDto findUser(String email) {
         if(email == null) throw new SimpleCustomerException("Email cannot be null");
         validateEmail(email);
-        User optionalUser = userRepository.findByEmail(email)
+        Customer optionalCustomer = userRepository.findByEmail(email)
                 .orElseThrow(()-> new SimpleCustomerException("User does not exist!"));
-        return modelMapper.map(optionalUser, UserDto.class);
+        return modelMapper.map(optionalCustomer, UserDto.class);
     }
 
     @Override
     public List<UserDto> findAllUsers() {
-        List<User> userList = userRepository.findAll();
+        List<Customer> customerList = userRepository.findAll();
+        log.info("Customer list count: -> {}", customerList.size());
         List<UserDto> userDtoList = new ArrayList<>();
-        if (userList.size() == userRepository.count()) {
-            for (User user : userList) {
-                userDtoList.add(modelMapper.map(user, UserDto.class));
-            }
-        }
+        System.out.println(Arrays.deepToString(customerList.toArray()));
+        userDtoList = customerList.stream()
+                    .map(customer -> modelMapper.map(customer, UserDto.class))
+                    .collect(Collectors.toList());
         return userDtoList;
     }
 
