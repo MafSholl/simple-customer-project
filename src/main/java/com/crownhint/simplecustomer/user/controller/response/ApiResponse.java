@@ -12,6 +12,6 @@ import java.io.Serializable;
 public class ApiResponse implements Serializable {
     private String status;
     private String message;
-    private Object data;
     private int statusCode;
+    private Object data;
 }

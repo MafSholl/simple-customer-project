@@ -2,6 +2,7 @@ package com.crownhint.simplecustomer.user.controller;
 
 import com.crownhint.simplecustomer.user.controller.response.ApiResponse;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
+import com.crownhint.simplecustomer.user.dtos.LoginDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
 import com.crownhint.simplecustomer.user.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,8 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
-class CustomerControllerTest {
+@WebMvcTest(CustomerController.class)
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,7 +43,7 @@ class CustomerControllerTest {
                 .firstName("Ijaduola")
                 .lastName("Kashimawo")
                 .email("kaja@example.com")
-                .role("customer")
+                .role("user")
                 .build();
         this.request = request;
 
@@ -55,19 +56,19 @@ class CustomerControllerTest {
     }
     @Test
     public void userControllerExistTest() {
-        UserController userController = new UserController();
-        assertThat(userController).isNotNull();
+        CustomerController customerController = new CustomerController();
+        assertThat(customerController).isNotNull();
     }
 
     @Test
     public void getWhenSaveEndpointCalled_ThenEmptyResponseTest() throws Exception {
-        this.mockMvc.perform(post("/api/v1/customer/save-customer"))
+        this.mockMvc.perform(post("/api/v1/customers/save-customer"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void whenSaveEndpointCalled_ParamsExpectedTest() throws Exception {
-        this.mockMvc.perform(post("/api/v1/customer/save-customer")
+        this.mockMvc.perform(post("/api/v1/customers/save-customer")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -76,7 +77,7 @@ class CustomerControllerTest {
     @Test
     public void whenSaveEndpointCalled_AndIncorrectRequestBody_ThenReturns400Test() throws Exception {
         CreateUserDto request = new CreateUserDto();
-        this.mockMvc.perform(post("/api/v1/customer/save-customer")
+        this.mockMvc.perform(post("/api/v1/customers/save-customer")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -85,7 +86,7 @@ class CustomerControllerTest {
 
     @Test
     public void whenSaveEndpointCalled_BusinessLogicIsCalledTest() throws Exception {
-        this.mockMvc.perform(post("/api/v1/customer/save-customer")
+        this.mockMvc.perform(post("/api/v1/customers/save-customer")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -97,13 +98,13 @@ class CustomerControllerTest {
     public void whenSaveEndpointCalled_BusinessLogicReturns_BodyAnd200Test() throws Exception {
         ApiResponse expectedResponse = ApiResponse.builder()
                 .status("Success")
-                .message("Customer created successfully")
+                .message("User created successfully")
                 .data(responseBody)
                 .statusCode(HttpStatus.OK.value())
                 .build();
         when(userService.createUser(any(CreateUserDto.class))).thenReturn(responseBody);
 
-        MvcResult result =this.mockMvc.perform(post("/api/v1/customer/save-customer")
+        MvcResult result =this.mockMvc.perform(post("/api/v1/customers/save-customer")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -122,13 +123,13 @@ class CustomerControllerTest {
                 .build();
         ApiResponse expectedResponse = ApiResponse.builder()
                 .status("Success")
-                .message("Customer found successfully")
+                .message("User found successfully")
                 .data(responseBody)
                 .statusCode(HttpStatus.OK.value())
                 .build();
         when(userService.findUser(any(String.class))).thenReturn(responseBody);
 
-        MvcResult result = this.mockMvc.perform(get("/api/v1/customer/find-customer")
+        MvcResult result = this.mockMvc.perform(get("/api/v1/customers/find-customer")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("email", request.getEmail()))
@@ -155,13 +156,44 @@ class CustomerControllerTest {
                 .build();
         when(userService.findAllUsers()).thenReturn(usersList);
 
-        MvcResult result = this.mockMvc.perform(get("/api/v1/customer/all-customer")
+        MvcResult result = this.mockMvc.perform(get("/api/v1/customers/all")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
         String actualResponse = result.getResponse().getContentAsString();
         assertThat(actualResponse).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(expectedResponse));
+    }
+
+    @Test
+    void testThat_UserCanLogin() throws Exception {
+        UserDto responseBody = UserDto.builder()
+                .firstName(this.request.getFirstName())
+                .lastName(this.request.getLastName())
+                .email(this.request.getEmail())
+                .build();
+        ApiResponse expectedResponse = ApiResponse.builder()
+                .status("Success")
+                .message("Login successful")
+                .data(responseBody)
+                .statusCode(HttpStatus.OK.value())
+                .build();
+//        when(userService.findUser(any(String.class))).thenReturn(responseBody);
+        when(userService.login(any())).thenReturn(responseBody);
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/v1/customers/login")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(LoginDto.builder()
+                        .username(this.request.getEmail())
+                        .password("123456")
+                        .build()))
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualResponse = mvcResult.getResponse().getContentAsString();
+        assertThat(actualResponse).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(expectedResponse));
+
     }
 
 

@@ -14,7 +14,7 @@ IF OBJECT_ID(N'roles', N'U') IS NULL
     );
 
 
-IF OBJECT_ID(N'Customer', N'U') IS NULL
+IF OBJECT_ID(N'User', N'U') IS NULL
         CREATE TABLE Customer (
             id INT NOT NULL IDENTITY(1, 1),
             firstName VARCHAR(255) NOT NULL,
@@ -40,7 +40,7 @@ IF OBJECT_ID(N'billing_details', N'U') IS NULL
             ON DELETE NO ACTION
     );
 
-IF OBJECT_ID(N'Customer', N'U') IS NOT NULL
+IF OBJECT_ID(N'User', N'U') IS NOT NULL
         ALTER TABLE Customer
             ADD CONSTRAINT BillingDetails_Fk FOREIGN KEY (billing_id)
                 REFERENCES billing_details(id)

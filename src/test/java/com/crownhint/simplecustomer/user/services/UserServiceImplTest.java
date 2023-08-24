@@ -4,7 +4,7 @@ import com.crownhint.simplecustomer.billing.services.BillingService;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
 import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
-import com.crownhint.simplecustomer.user.models.Customer;
+import com.crownhint.simplecustomer.user.models.User;
 import com.crownhint.simplecustomer.user.models.enums.Role;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("dev")
-class CustomerServiceImplTest {
+class UserServiceImplTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -42,14 +42,14 @@ class CustomerServiceImplTest {
 
     @Test
     public void userExistTest() {
-        Customer customer = new Customer();
-        assertNotNull(customer);
+        User user = new User();
+        assertNotNull(user);
     }
 
     @Test
     public void userCanBeCreated() {
         CreateUserDto createUserDto = new CreateUserDto(
-                "Turaya", "Abeni-Agbon", "abeniagbon@hotmail.com", "Customer"
+                "Turaya", "Abeni-Agbon", "abeniagbon@hotmail.com", "User"
         );
         UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, modelMapper, billingService);
         UserDto newUser = userServiceImpl.createUser(createUserDto);
@@ -59,25 +59,25 @@ class CustomerServiceImplTest {
     @Test
     public void userCreated_IsPersisted() {
         CreateUserDto createUserDto = new CreateUserDto(
-                "Sam", "Igbenidion", "sameigbinedion@example.com", "Customer"
+                "Sam", "Igbenidion", "sameigbinedion@example.com", "User"
         );
         UserDto newUser =  customerDao.createUser(createUserDto);
-        Customer savedCustomer = userRepository.findByFirstName(createUserDto.getFirstName());
-        assertEquals(newUser.getEmail(), savedCustomer.getEmail());
+        User savedUser = userRepository.findByFirstName(createUserDto.getFirstName());
+        assertEquals(newUser.getEmail(), savedUser.getEmail());
     }
 
     @Test
     public void userPersisted_hasAllFieldsSet() {
         CreateUserDto createUserDto = new CreateUserDto(
-                "Samuel", "Olorunsola", "titobi@example.com", "Customer"
+                "Samuel", "Olorunsola", "titobi@example.com", "User"
         );
         UserDto newUser =  customerDao.createUser(createUserDto);
-        Customer savedCustomer = userRepository.findByFirstName(createUserDto.getFirstName());
-        assertEquals(createUserDto.getFirstName(), savedCustomer.getFirstName());
-        assertEquals(createUserDto.getLastName(), savedCustomer.getLastName());
-        assertEquals(createUserDto.getEmail(), savedCustomer.getEmail());
-        assertEquals(Role.class, savedCustomer.getRole().getClass() );
-        assertNotNull(savedCustomer.getBillingId());
+        User savedUser = userRepository.findByFirstName(createUserDto.getFirstName());
+        assertEquals(createUserDto.getFirstName(), savedUser.getFirstName());
+        assertEquals(createUserDto.getLastName(), savedUser.getLastName());
+        assertEquals(createUserDto.getEmail(), savedUser.getEmail());
+        assertEquals(Role.class, savedUser.getRole().getClass() );
+        assertNotNull(savedUser.getBillingId());
     }
 
     @Test
@@ -89,12 +89,12 @@ class CustomerServiceImplTest {
     @Test
     public void userWithExistingEmail_ThrowsException() {
         CreateUserDto request1 = new CreateUserDto(
-                "Samuel", "Olorunsola", "sam@example.com", "Customer"
+                "Samuel", "Olorunsola", "sam@example.com", "User"
         );
         customerDao.createUser(request1);
 
         CreateUserDto request2 = new CreateUserDto(
-                "Sam", "Olorun", "sam@example.com", "Customer"
+                "Sam", "Olorun", "sam@example.com", "User"
         );
         assertThrows(SimpleCustomerException.class, ()-> customerDao.createUser(request2));
     }
@@ -102,12 +102,12 @@ class CustomerServiceImplTest {
     @Test
     public void incorrectEmailFormat_ThrowsException() {
         CreateUserDto request1 = new CreateUserDto(
-                "doja", "Olusola", "doja@example.com", "Customer"
+                "doja", "Olusola", "doja@example.com", "User"
         );
         customerDao.createUser(request1);
 
         CreateUserDto request2 = new CreateUserDto(
-                "dupe", "bawa", "ss;g@example.com", "Customer"
+                "dupe", "bawa", "ss;g@example.com", "User"
         );
         assertThrows(SimpleCustomerException.class, ()-> customerDao.createUser(request2));
     }
@@ -115,10 +115,10 @@ class CustomerServiceImplTest {
     @Test
     public void oneUser_canBeQueried() {
         CreateUserDto request = new CreateUserDto(
-                "sumbo", "unicorn", "unicorn@example.com", "Customer"
+                "sumbo", "unicorn", "unicorn@example.com", "User"
         );
         CreateUserDto request1 = new CreateUserDto(
-                "cobalt", "coppa", "coppa@example.com", "Customer"
+                "cobalt", "coppa", "coppa@example.com", "User"
         );
         customerDao.createUser(request);
         customerDao.createUser(request1);
@@ -129,10 +129,10 @@ class CustomerServiceImplTest {
     @Test
     public void nonExistingUserEmailSearch_throwsException() {
         CreateUserDto request = new CreateUserDto(
-                "crisux", "latino", "latino@example.com", "Customer"
+                "crisux", "latino", "latino@example.com", "User"
         );
         CreateUserDto request1 = new CreateUserDto(
-                "logan", "tripartite", "logan@example.com", "Customer"
+                "logan", "tripartite", "logan@example.com", "User"
         );
         customerDao.createUser(request);
         customerDao.createUser(request1);
@@ -142,13 +142,13 @@ class CustomerServiceImplTest {
     @Test
     public void allUsers_canBeQueried() {
         CreateUserDto request = new CreateUserDto(
-                "hillsong", "deeper", "hillsong@example.com", "Customer"
+                "hillsong", "deeper", "hillsong@example.com", "User"
         );
         CreateUserDto request1 = new CreateUserDto(
-                "singer", "girlie", "girlie@example.com", "Customer"
+                "singer", "girlie", "girlie@example.com", "User"
         );
         CreateUserDto request2 = new CreateUserDto(
-                "hallelujah", "abidogun", "habidoun@example.com", "Customer"
+                "hallelujah", "abidogun", "habidoun@example.com", "User"
         );
         UserDto savedUser1 = customerDao.createUser(request);
         UserDto savedUser2 = customerDao.createUser(request1);
