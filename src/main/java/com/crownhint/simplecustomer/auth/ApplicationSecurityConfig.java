@@ -1,27 +1,25 @@
-package com.crownhint.simplecustomer.security;
+package com.crownhint.simplecustomer.auth;
 
 import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
+import com.crownhint.simplecustomer.auth.jwt.JwtAuthenticationFilter;
+import com.crownhint.simplecustomer.user.repository.UserRepository;
 import com.crownhint.simplecustomer.user.services.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +27,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class ApplicationSecurityConfig {
 
-    private final UserService userService;
+//    private final UserService userService;
+    private final UserRepository userRepository;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,11 +40,16 @@ public class ApplicationSecurityConfig {
                 .authorizeHttpRequests(
                         authorize -> {
                             try {
-                                authorize.requestMatchers("api/v1/customers/all").permitAll()
+                                authorize.requestMatchers("api/v1/auth/**").permitAll()
                                         .anyRequest()
                                         .authenticated()
                                         .and()
-                                        .httpBasic();
+                                        .sessionManagement()
+                                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                                        .and()
+                                        .authenticationProvider(authenticationProvider)
+                                        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
                             } catch (Exception ex) {
                                 throw new SimpleCustomerException("Authentication failure");
                             }
@@ -53,7 +59,9 @@ public class ApplicationSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userService.loadUserByUsername(username);
+        return username -> userRepository.findByEmail(username).orElseThrow(
+                ()-> new SimpleCustomerException("User does not exist")
+        );
     }
 
     @Bean
@@ -65,8 +73,7 @@ public class ApplicationSecurityConfig {
     }
 
     @Bean
-    @SneakyThrows
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 

@@ -4,6 +4,7 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 @Getter
 @Setter
@@ -12,4 +13,5 @@ public class CreateUserDto {
     @NonNull private String lastName;
     @NonNull private String email;
     @NonNull private String role;
+    private String password;
 }

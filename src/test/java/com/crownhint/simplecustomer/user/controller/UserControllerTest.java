@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CustomerController.class)
+@WebMvcTest(UserController.class)
 class UserControllerTest {
 
     @Autowired
@@ -56,8 +56,8 @@ class UserControllerTest {
     }
     @Test
     public void userControllerExistTest() {
-        CustomerController customerController = new CustomerController();
-        assertThat(customerController).isNotNull();
+        UserController userController = new UserController();
+        assertThat(userController).isNotNull();
     }
 
     @Test

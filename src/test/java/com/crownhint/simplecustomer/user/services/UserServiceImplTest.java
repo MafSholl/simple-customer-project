@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -30,13 +31,16 @@ class UserServiceImplTest {
     private ModelMapper modelMapper;
     @Autowired
     private BillingService billingService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setup() {
         customerDao = new UserServiceImpl(
                 userRepository,
                 modelMapper,
-                billingService
+                billingService,
+                passwordEncoder
         );
     }
 
@@ -51,7 +55,7 @@ class UserServiceImplTest {
         CreateUserDto createUserDto = new CreateUserDto(
                 "Turaya", "Abeni-Agbon", "abeniagbon@hotmail.com", "User"
         );
-        UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, modelMapper, billingService);
+        UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, modelMapper, billingService,passwordEncoder);
         UserDto newUser = userServiceImpl.createUser(createUserDto);
         assertEquals(createUserDto.getFirstName(), newUser.getFirstName());
     }

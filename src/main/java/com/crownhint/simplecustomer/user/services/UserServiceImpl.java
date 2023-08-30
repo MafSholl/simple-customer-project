@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,13 +28,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private ModelMapper modelMapper;
     private final BillingService billingService;
+    private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository,
                            ModelMapper modelMapper,
-                           BillingService billingService) {
+                           BillingService billingService,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.billingService = billingService;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
     public UserDto createUser(CreateUserDto createUserRequest) {
@@ -41,6 +45,7 @@ public class UserServiceImpl implements UserService {
         validateDuplicateEmailIfExistingInRepository(createUserRequest);
         validateEmail(createUserRequest.getEmail());
         User user = modelMapper.map(createUserRequest, User.class);
+        user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
         user.setRole(
                 (createUserRequest.getRole().equalsIgnoreCase("user")) ? Role.CUSTOMER : Role.STAFF
         );
