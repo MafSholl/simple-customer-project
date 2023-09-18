@@ -3,17 +3,20 @@ package com.crownhint.simplecustomer.auth.entrypoint.service;
 import com.crownhint.simplecustomer.auth.jwt.JwtService;
 import com.crownhint.simplecustomer.auth.entrypoint.dtos.AuthenticationDto;
 import com.crownhint.simplecustomer.auth.entrypoint.dtos.AuthenticationResponse;
-import com.crownhint.simplecustomer.auth.jwt.JwtServiceImpl;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
 import com.crownhint.simplecustomer.user.models.User;
 import com.crownhint.simplecustomer.user.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
@@ -33,21 +36,24 @@ public class AuthServiceImpl implements AuthService {
     }
     @Override
     public AuthenticationResponse register(CreateUserDto registerRequest) {
+        log.info("Register request: -> {}", registerRequest);
         UserDto registeredUser = userService.createUser(registerRequest);
         var jwtToken = jwtService.generateToken(modelMapper.map(registeredUser, User.class));
-        return new AuthenticationResponse(jwtToken);
+        return new AuthenticationResponse("Registration successful!", jwtToken);
     }
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationDto authenticationRequest) {
-        authenticationManager.authenticate(
+        log.info("Login request user:{} -> {}", authenticationRequest.getEmail(), authenticationRequest);
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()
                 )
         );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDto userDto = userService.findUser(authenticationRequest.getEmail());
         String jwtToken = jwtService.generateToken(modelMapper.map(userDto, User.class));
-        return new AuthenticationResponse(jwtToken);
+        return new AuthenticationResponse("Login successful", jwtToken);
     }
 }

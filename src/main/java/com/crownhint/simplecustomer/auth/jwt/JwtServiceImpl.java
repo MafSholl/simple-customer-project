@@ -1,10 +1,12 @@
 package com.crownhint.simplecustomer.auth.jwt;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +17,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@Slf4j
 public class JwtServiceImpl implements JwtService{
 
-    private static final String SECRET_KEY = System.getenv("SECRET_KEY");
+    private static final String SECRET_KEY = Dotenv.load().get("SECRET_KEY");
 
     @Override
     public String extractUsername(String token) {
@@ -30,6 +33,7 @@ public class JwtServiceImpl implements JwtService{
 
 
     public String generateToken(Map<String, Object> tokenClaims, UserDetails userDetails) {
+        log.info("Generating token for user -> {}", userDetails.getUsername());
         return Jwts.builder()
                 .setClaims(tokenClaims)
                 .setSubject(userDetails.getUsername())
@@ -67,6 +71,7 @@ public class JwtServiceImpl implements JwtService{
     }
 
     private Key getSigningKey() {
+        log.info("SECRET_KEY -> {}" ,SECRET_KEY);
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }

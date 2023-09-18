@@ -1,7 +1,9 @@
 package com.crownhint.simplecustomer.auth;
 
 import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
+import com.crownhint.simplecustomer.Exception.handler.ExceptionHandlerFilter;
 import com.crownhint.simplecustomer.auth.jwt.JwtAuthenticationFilter;
+import com.crownhint.simplecustomer.auth.jwt.JwtServiceImpl;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
 import com.crownhint.simplecustomer.user.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,41 +29,44 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class ApplicationSecurityConfig {
 
-//    private final UserService userService;
     private final UserRepository userRepository;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authenticationProvider;
+//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+//    private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
                 .cors().and().csrf().disable()
                 .authorizeHttpRequests(
                         authorize -> {
                             try {
-                                authorize.requestMatchers("api/v1/auth/**").permitAll()
+                                authorize.requestMatchers("/api/v1/auth/**").permitAll()
+                                        .requestMatchers("/api/v1/customers").hasRole("ADMIN")
                                         .anyRequest()
                                         .authenticated()
                                         .and()
                                         .sessionManagement()
                                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                                         .and()
-                                        .authenticationProvider(authenticationProvider)
-                                        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                                        .authenticationProvider(authenticationProvider())
+                                        .addFilterBefore(jwtAuthenticationFilterBean(), UsernamePasswordAuthenticationFilter.class)
+                                        .addFilterBefore(exceptionHandlerFilterBean(), JwtAuthenticationFilter.class);
 
                             } catch (Exception ex) {
+                                log.info("Authetication failure stacktrace:\n{}", (Object) ex.getStackTrace());
                                 throw new SimpleCustomerException("Authentication failure");
                             }
                         });
+
+//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(exceptionHandlerFilterBean(), JwtAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username).orElseThrow(
-                ()-> new SimpleCustomerException("User does not exist")
-        );
+        return username -> userRepository
+                .findByEmail(username).orElseThrow();
     }
 
     @Bean
@@ -78,8 +83,21 @@ public class ApplicationSecurityConfig {
     }
 
     @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilterBean() {
+        return new JwtAuthenticationFilter(
+                new JwtServiceImpl(),
+                userDetailsService()
+        );
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ExceptionHandlerFilter exceptionHandlerFilterBean() {
+        return new ExceptionHandlerFilter();
     }
 
 }

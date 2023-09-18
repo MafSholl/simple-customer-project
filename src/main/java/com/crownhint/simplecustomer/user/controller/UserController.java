@@ -20,7 +20,7 @@ public class UserController {
     private UserService userService;
 
 
-    @GetMapping("/find-customer")
+    @GetMapping("/get-customer")
     public ResponseEntity<?> findCustomer(@RequestParam("email") String email) {
         log.info("Request param email is: -> {}", email);
         UserDto responseBody = userService.findUser(email);
@@ -34,7 +34,7 @@ public class UserController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<?> findAllCustomer() {
         log.info("Find all endpoint hit");
         List<UserDto> responseBody = userService.findAllUsers();
