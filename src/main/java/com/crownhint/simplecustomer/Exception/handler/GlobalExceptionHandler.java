@@ -29,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> conflictHandler(Exception ex) {
-        log.info(Arrays.toString(ex.getStackTrace()));
+        ex.printStackTrace();
         ApiResponse body = ApiResponse.builder()
                 .status("Something happened. Please try again.")
                 .message(ex.getMessage())

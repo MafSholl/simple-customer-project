@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @Builder
+@Slf4j
 public class ApiError {
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -28,6 +30,7 @@ public class ApiError {
     private String error;
     private String message;
     private String path;
+    private Throwable e;
 
     public ApiError() {
         this.timeStamp = LocalDateTime.now();
@@ -36,6 +39,7 @@ public class ApiError {
     public ApiError(HttpStatus status,  Throwable e) {
         this();
         this.status = status.value();
+//        this.e = e;
     }
 
     public String convertToJson() throws JsonProcessingException {

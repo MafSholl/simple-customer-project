@@ -10,6 +10,7 @@ import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException
 import com.crownhint.simplecustomer.user.models.User;
 import com.crownhint.simplecustomer.user.models.enums.Role;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
         this.jwtService = jwtService;
     }
     @Override
+    @Transactional
     public UserDto createUser(CreateUserDto createUserRequest) {
         validateInputFields(createUserRequest);
         validateDuplicateEmailIfExistingInRepository(createUserRequest);

@@ -13,6 +13,12 @@ import lombok.*;
 @Entity(name = "billing_details")
 public class BillingDetails {
     @Id
+    @SequenceGenerator(
+            name = "billing_generator",
+            sequenceName = "billing_details_seq",
+            initialValue = 101,
+            allocationSize = 1
+    )
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NonNull

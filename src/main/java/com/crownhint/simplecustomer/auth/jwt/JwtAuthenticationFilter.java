@@ -36,7 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwtToken;
         String userEmail;
         String password;
-        if (authHeader == null || authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.info("Missing or bad authentication header");
             filterChain.doFilter(request, response);
             return;
         }
@@ -45,18 +46,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user =  this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwtToken, user)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        user, null, user.getAuthorities()
+                );
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                log.info("Invalid token supplied by user -> {}, {}", user.getUsername(), jwtToken);
             }
-//            else {
-//                log.info("Invalid token supplied by user -> {}, {}", user.getUsername(), jwtToken);
-//            }
         }
 //        else {
-//            log.info("Username not supplied");
+//            log.info("Wrong username");
 //        }
         filterChain.doFilter(request, response);
     }
