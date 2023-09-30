@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String userEmail;
         String password;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.info("Missing or bad authentication header");
+            log.info("Missing authentication header. Passing control to UsernamePasswordAuth Filter");
             filterChain.doFilter(request, response);
             return;
         }

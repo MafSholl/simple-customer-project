@@ -1,5 +1,6 @@
 package com.crownhint.simplecustomer.user.services;
 
+import com.crownhint.simplecustomer.auth.jwt.JwtService;
 import com.crownhint.simplecustomer.billing.services.BillingService;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
@@ -33,6 +34,8 @@ class UserServiceImplTest {
     private BillingService billingService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtService jwtService;
 
     @BeforeEach
     void setup() {
@@ -40,7 +43,8 @@ class UserServiceImplTest {
                 userRepository,
                 modelMapper,
                 billingService,
-                passwordEncoder
+                passwordEncoder,
+                jwtService
         );
     }
 
@@ -55,7 +59,7 @@ class UserServiceImplTest {
         CreateUserDto createUserDto = new CreateUserDto(
                 "Turaya", "Abeni-Agbon", "abeniagbon@hotmail.com", "User"
         );
-        UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, modelMapper, billingService,passwordEncoder);
+        UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, modelMapper, billingService,passwordEncoder,jwtService);
         UserDto newUser = userServiceImpl.createUser(createUserDto);
         assertEquals(createUserDto.getFirstName(), newUser.getFirstName());
     }

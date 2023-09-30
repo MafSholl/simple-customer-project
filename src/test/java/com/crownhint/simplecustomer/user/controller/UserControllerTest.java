@@ -1,5 +1,7 @@
 package com.crownhint.simplecustomer.user.controller;
 
+import com.crownhint.simplecustomer.auth.jwt.JwtAuthenticationFilter;
+import com.crownhint.simplecustomer.auth.jwt.JwtService;
 import com.crownhint.simplecustomer.user.controller.response.ApiResponse;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.LoginDto;
@@ -8,11 +10,15 @@ import com.crownhint.simplecustomer.user.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -30,12 +36,15 @@ class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
+    @Mock
     private UserService userService;
     @Autowired
     private ObjectMapper objectMapper;
     private CreateUserDto request;
     private UserDto responseBody;
+    @InjectMocks private JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired JwtService jwtService;
+    @Autowired UserDetailsService userDetailsService;
 
     @BeforeEach
     void setUp() {
@@ -181,7 +190,7 @@ class UserControllerTest {
 //        when(userService.findUser(any(String.class))).thenReturn(responseBody);
         when(userService.login(any())).thenReturn(responseBody);
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/v1/customers/login")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/v1/auth/login")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(LoginDto.builder()
