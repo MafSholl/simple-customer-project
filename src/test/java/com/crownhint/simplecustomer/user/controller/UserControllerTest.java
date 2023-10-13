@@ -42,9 +42,9 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
     private CreateUserDto request;
     private UserDto responseBody;
-    @InjectMocks private JwtAuthenticationFilter jwtAuthenticationFilter;
-    @Autowired JwtService jwtService;
-    @Autowired UserDetailsService userDetailsService;
+//    @InjectMocks private JwtAuthenticationFilter jwtAuthenticationFilter;
+//    @Autowired JwtService jwtService;
+//    @Autowired UserDetailsService userDetailsService;
 
     @BeforeEach
     void setUp() {

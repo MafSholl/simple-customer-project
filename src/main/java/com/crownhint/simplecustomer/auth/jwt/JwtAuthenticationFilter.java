@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -19,6 +20,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -37,15 +39,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String userEmail;
         String password;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.info("Missing authentication header. Passing control to UsernamePasswordAuth Filter");
+            log.info("Missing valid authentication header. Passing control to UsernamePasswordAuthentication Filter");
             filterChain.doFilter(request, response);
             return;
         }
         jwtToken = authHeader.substring(7);
+        logger.info("Authentication header valid. Moving to extract username");
         userEmail = jwtService.extractUsername(jwtToken);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user =  this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwtToken, user)) {
+            if (jwtService. isTokenValid(jwtToken, user)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities()
                 );
@@ -53,9 +56,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-            } else {
-                log.info("Invalid token supplied by user -> {}, {}", user.getUsername(), jwtToken);
             }
+//            else {
+//                log.info("Invalid token supplied by user -> {}, {}", user.getUsername(), jwtToken);
+//            }
         }
 //        else {
 //            log.info("Wrong username");

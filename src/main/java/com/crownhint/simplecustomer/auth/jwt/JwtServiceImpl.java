@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class JwtServiceImpl implements JwtService{
 
     @Override
     public String extractUsername(String token) {
+        log.info("Extracting claim - username - from token...");
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -45,6 +47,7 @@ public class JwtServiceImpl implements JwtService{
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+        log.info("Checking token validity for user -> {}", username);
         return (username.equals((userDetails.getUsername())) && !isTokenExpired(token));
     }
 
@@ -53,15 +56,18 @@ public class JwtServiceImpl implements JwtService{
     }
 
     private Date extractExpiration(String token) {
+        log.info("Extracting claim - token expiration - from token...");
         return extractClaim(token, Claims::getExpiration);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims =  extractAllClaims(token);
+        log.info("Extracting claim...");
         return claimsResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
+        log.info("Extracting all claims...");
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -72,6 +78,7 @@ public class JwtServiceImpl implements JwtService{
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        log.info("Getting Signing key...");
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

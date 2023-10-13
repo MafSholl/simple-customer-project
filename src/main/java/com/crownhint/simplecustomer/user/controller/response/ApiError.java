@@ -30,7 +30,6 @@ public class ApiError {
     private String error;
     private String message;
     private String path;
-    private Throwable e;
 
     public ApiError() {
         this.timeStamp = LocalDateTime.now();
@@ -39,7 +38,8 @@ public class ApiError {
     public ApiError(HttpStatus status,  Throwable e) {
         this();
         this.status = status.value();
-//        this.e = e;
+        this.message = e.getMessage();
+        this.error = e.getClass().toString();
     }
 
     public String convertToJson() throws JsonProcessingException {

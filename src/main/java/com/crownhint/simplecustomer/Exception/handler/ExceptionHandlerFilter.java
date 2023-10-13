@@ -18,9 +18,9 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                                     FilterChain chain) throws ServletException, IOException {
         try {
             chain.doFilter(request, response);
-        } catch (JwtException exception) {
-            exception.printStackTrace();
-            setErrorResponse(HttpStatus.BAD_REQUEST, request, response, exception);
+        } catch (JwtException ex) {
+            ex.printStackTrace();
+            setErrorResponse(HttpStatus.BAD_REQUEST, request, response, ex);
         } catch (RuntimeException exception) {
             exception.printStackTrace();
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, request, response, exception);
@@ -32,9 +32,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         response.setStatus(status.value());
         response.setContentType("application/json");
         ApiError apiError = new ApiError(status, ex);
-        apiError.setMessage(ex.getMessage());
         apiError.setPath(request.getServletPath());
-        apiError.setStatus(status.value());
         try {
             String JsonOutput = apiError.convertToJson();
             response.getWriter().write(JsonOutput);
