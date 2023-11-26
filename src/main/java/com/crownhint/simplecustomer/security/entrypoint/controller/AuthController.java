@@ -1,18 +1,14 @@
-package com.crownhint.simplecustomer.auth.entrypoint.controller;
+package com.crownhint.simplecustomer.security.entrypoint.controller;
 
-import com.crownhint.simplecustomer.auth.entrypoint.dtos.AuthenticationDto;
-import com.crownhint.simplecustomer.auth.entrypoint.dtos.AuthenticationResponse;
-import com.crownhint.simplecustomer.auth.entrypoint.service.AuthService;
+import com.crownhint.simplecustomer.security.entrypoint.dtos.AuthenticationDto;
+import com.crownhint.simplecustomer.security.entrypoint.dtos.AuthenticationResponse;
+import com.crownhint.simplecustomer.security.entrypoint.service.AuthService;
 import com.crownhint.simplecustomer.user.controller.response.ApiResponse;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
-import com.crownhint.simplecustomer.user.dtos.LoginDto;
-import com.crownhint.simplecustomer.user.dtos.UserDto;
-import com.crownhint.simplecustomer.user.services.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -38,7 +34,7 @@ public class AuthController {
                 .data(responseBody)
                 .statusCode(HttpStatus.OK.value())
                 .build();
-        log.info("Successfully created user. Exiting controller method api/v1/auth/signup");
+        log.info("Successfully created user. Exiting controller method api/v1/security/signup");
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 

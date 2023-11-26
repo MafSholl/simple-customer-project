@@ -1,4 +1,4 @@
-package com.crownhint.simplecustomer.auth.jwt;
+package com.crownhint.simplecustomer.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,9 @@
 package com.crownhint.simplecustomer.user.controller;
 
-import com.crownhint.simplecustomer.auth.jwt.JwtAuthenticationFilter;
-import com.crownhint.simplecustomer.auth.jwt.JwtService;
+import com.crownhint.simplecustomer.security.entrypoint.controller.AuthController;
+import com.crownhint.simplecustomer.security.entrypoint.dtos.AuthenticationResponse;
+import com.crownhint.simplecustomer.security.entrypoint.service.AuthService;
+import com.crownhint.simplecustomer.security.jwt.JwtService;
 import com.crownhint.simplecustomer.user.controller.response.ApiResponse;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.LoginDto;
@@ -10,15 +12,11 @@ import com.crownhint.simplecustomer.user.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -32,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
+@WebMvcTest({UserController.class, AuthController.class})
 @ActiveProfiles("dev")
 class UserControllerTest {
 
@@ -40,10 +38,15 @@ class UserControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private UserService userService;
+    @MockBean
+    private AuthService authService;
+    @MockBean
+    private JwtService jwtService;
     @Autowired
     private ObjectMapper objectMapper;
     private CreateUserDto request;
     private UserDto responseBody;
+    private AuthenticationResponse authResponse;
 //    @InjectMocks private JwtAuthenticationFilter jwtAuthenticationFilter;
 //    @Autowired JwtService jwtService;
 //    @Autowired UserDetailsService userDetailsService;
@@ -64,6 +67,12 @@ class UserControllerTest {
                 .email("kaja@example.com")
                 .build();
         this.responseBody = responseBody;
+
+        AuthenticationResponse authResponse = new AuthenticationResponse(
+                "User created successfully",
+                "jwt token"
+        );
+        this.authResponse = authResponse;
     }
     @Test
     public void userControllerExistTest() {
@@ -73,13 +82,13 @@ class UserControllerTest {
 
     @Test
     public void getWhenSaveEndpointCalled_ThenEmptyResponseTest() throws Exception {
-        this.mockMvc.perform(post("/api/v1/customers/save-customer"))
+        this.mockMvc.perform(post("/api/v1/auth/signup"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void whenSaveEndpointCalled_ParamsExpectedTest() throws Exception {
-        this.mockMvc.perform(post("/api/v1/customers/save-customer")
+        this.mockMvc.perform(post("/api/v1/auth/signup")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -88,7 +97,7 @@ class UserControllerTest {
     @Test
     public void whenSaveEndpointCalled_AndIncorrectRequestBody_ThenReturns400Test() throws Exception {
         CreateUserDto request = new CreateUserDto();
-        this.mockMvc.perform(post("/api/v1/customers/save-customer")
+        this.mockMvc.perform(post("/api/v1/auth/signup")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -97,12 +106,12 @@ class UserControllerTest {
 
     @Test
     public void whenSaveEndpointCalled_BusinessLogicIsCalledTest() throws Exception {
-        this.mockMvc.perform(post("/api/v1/customers/save-customer")
+        this.mockMvc.perform(post("/api/v1/auth/signup")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
-        verify(userService, times(1)).createUser(any(CreateUserDto.class));
+        verify(authService, times(1)).register(any(CreateUserDto.class));
     }
 
     @Test
@@ -113,7 +122,12 @@ class UserControllerTest {
                 .data(responseBody)
                 .statusCode(HttpStatus.OK.value())
                 .build();
-        when(userService.createUser(any(CreateUserDto.class))).thenReturn(responseBody);
+        AuthenticationResponse expectedAuthResponse = new AuthenticationResponse(
+                "User created successfully",
+                "jwt token"
+        );
+        when(authService.register(any(CreateUserDto.class))).thenReturn(authResponse);
+        when(jwtService.generateToken(any())).thenReturn("jwt token");
 
         MvcResult result =this.mockMvc.perform(post("/api/v1/customers/save-customer")
                 .accept(MediaType.APPLICATION_JSON)
@@ -122,7 +136,8 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String actualResponse = result.getResponse().getContentAsString();
-        assertThat(actualResponse).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(expectedResponse));
+        System.out.println(actualResponse);
+        assertThat(actualResponse).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(expectedAuthResponse));
     }
 
     @Test

@@ -22,6 +22,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             ex.printStackTrace();
             setErrorResponse(HttpStatus.BAD_REQUEST, request, response, ex);
         } catch (RuntimeException exception) {
+            logger.warn("FilterChain error caught! Caused by {} chain", exception.getCause());
             exception.printStackTrace();
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, request, response, exception);
         }

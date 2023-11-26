@@ -1,21 +1,21 @@
 package com.crownhint.simplecustomer.config;
 
-import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
+import com.crownhint.simplecustomer.security.SpringSecurityAuditorAware;
+import com.crownhint.simplecustomer.user.models.User;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableJpaAuditing
 public class ApplicationConfig {
 
     private final UserRepository userRepository;
@@ -51,4 +51,6 @@ public class ApplicationConfig {
 //    public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();
 //    }
+
+
 }

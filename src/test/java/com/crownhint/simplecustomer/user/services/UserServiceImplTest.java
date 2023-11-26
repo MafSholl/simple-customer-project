@@ -1,6 +1,6 @@
 package com.crownhint.simplecustomer.user.services;
 
-import com.crownhint.simplecustomer.auth.jwt.JwtService;
+import com.crownhint.simplecustomer.security.jwt.JwtService;
 import com.crownhint.simplecustomer.billing.services.BillingService;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
@@ -12,10 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 

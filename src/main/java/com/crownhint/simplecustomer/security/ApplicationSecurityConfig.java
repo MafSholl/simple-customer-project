@@ -1,21 +1,20 @@
-package com.crownhint.simplecustomer.auth;
+package com.crownhint.simplecustomer.security;
 
 import com.crownhint.simplecustomer.Exception.exceptions.SimpleCustomerException;
 import com.crownhint.simplecustomer.Exception.handler.ExceptionHandlerFilter;
-import com.crownhint.simplecustomer.auth.jwt.JwtAuthenticationFilter;
-import com.crownhint.simplecustomer.auth.jwt.JwtServiceImpl;
+import com.crownhint.simplecustomer.security.jwt.JwtAuthenticationFilter;
+import com.crownhint.simplecustomer.security.jwt.JwtServiceImpl;
+import com.crownhint.simplecustomer.user.models.User;
 import com.crownhint.simplecustomer.user.repository.UserRepository;
-import com.crownhint.simplecustomer.user.services.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -41,9 +40,11 @@ public class ApplicationSecurityConfig {
                 .authorizeHttpRequests(
                         authorize -> {
                             try {
-                                authorize.requestMatchers("/api/v1/auth/**").permitAll()
+                                authorize
+                                        .requestMatchers("/api/v1/auth/**").permitAll()
                                         .requestMatchers(HttpMethod.GET, "/api/v1/customers").hasRole("ADMIN")
                                         .requestMatchers("api/v1/csutomers/**").hasAnyRole("ADMIN", "STAFF", "CUSTOMER")
+                                        .requestMatchers("/**").denyAll()
                                         .anyRequest()
                                         .authenticated()
                                         .and()

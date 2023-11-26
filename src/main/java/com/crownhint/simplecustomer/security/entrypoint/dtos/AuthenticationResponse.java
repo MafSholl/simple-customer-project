@@ -1,16 +1,17 @@
-package com.crownhint.simplecustomer.auth.entrypoint.dtos;
+package com.crownhint.simplecustomer.security.entrypoint.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class AuthenticationDto {
-    private String email;
-    private String password;
+public class AuthenticationResponse implements Serializable {
+    private String message;
     private String token;
 }

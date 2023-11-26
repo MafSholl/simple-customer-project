@@ -1,7 +1,7 @@
-package com.crownhint.simplecustomer.auth.entrypoint.service;
+package com.crownhint.simplecustomer.security.entrypoint.service;
 
-import com.crownhint.simplecustomer.auth.entrypoint.dtos.AuthenticationDto;
-import com.crownhint.simplecustomer.auth.entrypoint.dtos.AuthenticationResponse;
+import com.crownhint.simplecustomer.security.entrypoint.dtos.AuthenticationDto;
+import com.crownhint.simplecustomer.security.entrypoint.dtos.AuthenticationResponse;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 
 public interface AuthService {

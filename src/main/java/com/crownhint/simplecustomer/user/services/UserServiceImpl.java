@@ -1,6 +1,6 @@
 package com.crownhint.simplecustomer.user.services;
 
-import com.crownhint.simplecustomer.auth.jwt.JwtService;
+import com.crownhint.simplecustomer.security.jwt.JwtService;
 import com.crownhint.simplecustomer.billing.dtos.BillingDetailsDto;
 import com.crownhint.simplecustomer.billing.services.BillingService;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;

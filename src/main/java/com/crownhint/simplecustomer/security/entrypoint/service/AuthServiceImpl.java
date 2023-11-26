@@ -1,8 +1,8 @@
-package com.crownhint.simplecustomer.auth.entrypoint.service;
+package com.crownhint.simplecustomer.security.entrypoint.service;
 
-import com.crownhint.simplecustomer.auth.jwt.JwtService;
-import com.crownhint.simplecustomer.auth.entrypoint.dtos.AuthenticationDto;
-import com.crownhint.simplecustomer.auth.entrypoint.dtos.AuthenticationResponse;
+import com.crownhint.simplecustomer.security.jwt.JwtService;
+import com.crownhint.simplecustomer.security.entrypoint.dtos.AuthenticationDto;
+import com.crownhint.simplecustomer.security.entrypoint.dtos.AuthenticationResponse;
 import com.crownhint.simplecustomer.user.dtos.CreateUserDto;
 import com.crownhint.simplecustomer.user.dtos.UserDto;
 import com.crownhint.simplecustomer.user.models.User;
