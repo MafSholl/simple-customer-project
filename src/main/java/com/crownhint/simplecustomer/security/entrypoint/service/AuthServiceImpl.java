@@ -45,6 +45,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse authenticate(AuthenticationDto authenticationRequest) {
         log.info("Login request user:{} -> {}", authenticationRequest.getEmail(), authenticationRequest);
+        //try and catch must be used to catch auth error
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getEmail(),
@@ -56,4 +57,7 @@ public class AuthServiceImpl implements AuthService {
         String jwtToken = jwtService.generateToken(modelMapper.map(userDto, User.class));
         return new AuthenticationResponse("Login successful", jwtToken);
     }
+
+    //I realised that if username is correct but password is wrong, a Spring Security exception
+    //BadCredentialException is thrown. Thankfully I have my exception handler
 }

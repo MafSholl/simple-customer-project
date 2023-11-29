@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userEmail = jwtService.extractUsername(jwtToken);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user =  this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService. isTokenValid(jwtToken, user)) {
+            if (jwtService.isTokenValid(jwtToken, user)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities()
                 );
